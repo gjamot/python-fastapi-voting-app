@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: fastapi-voting-app-db-node
+    image: postgres:15
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api:
+    container_name: fastapi-voting-app-api-node
+    build:
+      context: ./api
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "${API_PORT}:8091"
+
+  frontend:
+    container_name: fastapi-voting-app-fronend-node
+    build:
+      context: ./frontend
+    ports:
+      - "${WEB_PORT}:80"
+    depends_on:
+      - api
