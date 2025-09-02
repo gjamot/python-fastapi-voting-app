@@ -17,7 +17,7 @@ services:
   api:
     container_name: fastapi-voting-app-api-node
     build:
-      context: ./api
+      context: ./apps/api
     depends_on:
       - db
     environment:
@@ -28,7 +28,7 @@ services:
   frontend:
     container_name: fastapi-voting-app-fronend-node
     build:
-      context: ./frontend
+      context: ./apps/frontend
     ports:
       - "${WEB_PORT}:80"
     depends_on:
